@@ -1,8 +1,32 @@
 const express = require('express');
+//apolloserver
+const { ApolloServerPluginLandingPageGraphQLPlayground } = require("apollo-server-core");
+const { ApolloServer } = require('apollo-server-express');
+const { typeDefs, resolvers } = require('./schemas');
+
 const db = require('./config/connection');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+const startServer = async() => {
+  //create a new apollo server and pas in our schmema data
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [
+      ApolloServerPluginLandingPageGraphQLPlayground(),
+    ]
+  });
+  //start server
+  await server.start();
+  //integrate apollo server with express app as middlewear
+  server.applyMiddleware({ app });
+  //log where we can test our gql api
+  console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+};
+//initializw the apollo server
+startServer();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
