@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client';
 import ThoughList from '../components/ThoughtList';
 import Auth from '../utils/auth';
 import FriendList from '../components/FriendList';
+import ThoughtForm from '../components/ThoughtForm';
 
 const Home = () => {
   //use use uery hooke to make query request
@@ -15,6 +16,11 @@ const Home = () => {
   return (
     <main>
       <div className='flex-row justify-space-between'>
+        {loggedIn && (
+          <div className="col-12 mb-3">
+            <ThoughtForm />
+            </div>
+        )}
         <div className={`col-12 mb-3 ${loggedIn && 'col-lg-8'}`}>
           {loading ? (
             <div>Loading...</div>
